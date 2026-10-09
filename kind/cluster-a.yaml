@@ -1,0 +1,9 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: meshery-a
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      - containerPort: 30081   # NodePort da UI do Meshery
+        hostPort: 9081
+        protocol: TCP
