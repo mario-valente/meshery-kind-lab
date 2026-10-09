@@ -37,3 +37,14 @@ Pré-requisitos: docker, kind, kubectl, helm.
 - **Performance**: testes de carga (ex.: contra `web.demo.svc`).
 
 Tutoriais oficiais: https://docs.meshery.io/guides/tutorials/
+
+## Designs: import e dry-run via API
+
+`manifests/sample-app-v2.yaml` tem um erro proposital (`port: 99999`) para testar o dry-run.
+Na UI: **Configuration → Designs → Import**, depois **Actions → Dry Run** e escolha os clusters.
+
+Observações do teste (Meshery v1.0.70):
+- O dry-run usa semântica de *create*: recursos que já existem retornam `409 already exists`.
+- Cada componente é testado isoladamente: se o Namespace não existir, os outros componentes falham com `404`, e o erro real fica escondido.
+- O erro de schema aparece certinho por campo (`spec.ports[0].port must be between 1 and 65535`) em cada cluster.
+- Às vezes um cluster retorna `405` por engano no dry-run multi-cluster (parece condição de corrida).
